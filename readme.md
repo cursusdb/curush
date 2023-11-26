@@ -33,7 +33,7 @@ You can specify a specific CursusDB cluster port.
 
 - ``env GOOS=linux GOARCH=arm go build -o bin/linux/arm/curush``
 
-``env GOOS=linux GOARCH=arm64 go build -o bin/linux/arm64/curush``
+- ``env GOOS=linux GOARCH=arm64 go build -o bin/linux/arm64/curush``
 
 ### FreeBSD
 
