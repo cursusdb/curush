@@ -26,13 +26,13 @@ import (
 	"fmt"
 	"github.com/peterh/liner"
 	"golang.org/x/term"
-	"log"
 	"net"
 	"net/textproto"
 	"os"
 	"path/filepath"
 	"strings"
 	"syscall"
+	"unicode/utf8"
 )
 
 // Curush is the main CursusDB Shell type
@@ -76,12 +76,16 @@ func main() {
 			os.Exit(1)
 		}
 
+		defer conn.Close()
+
 		fmt.Print("Username>")
 		username, err := term.ReadPassword(syscall.Stdin)
 		if err != nil {
 			fmt.Println(err.Error())
 			os.Exit(1)
 		}
+		fmt.Print(strings.Repeat("*", utf8.RuneCountInString(string(username))))
+
 		fmt.Println("")
 		fmt.Print("Password>")
 		password, err := term.ReadPassword(syscall.Stdin)
@@ -89,6 +93,7 @@ func main() {
 			fmt.Println(err.Error())
 			os.Exit(1)
 		}
+		fmt.Print(strings.Repeat("*", utf8.RuneCountInString(string(password))))
 
 		text := textproto.NewConn(conn)
 		// Authenticate
@@ -152,8 +157,6 @@ func main() {
 		} else {
 			fmt.Println("Invalid credentials.")
 		}
-
-		conn.Close()
 
 	} else {
 		config := tls.Config{InsecureSkipVerify: true}
@@ -164,12 +167,15 @@ func main() {
 			os.Exit(1)
 		}
 
+		defer conn.Close()
+
 		fmt.Print("Username>")
 		username, err := term.ReadPassword(syscall.Stdin)
 		if err != nil {
 			fmt.Println(err.Error())
 			os.Exit(1)
 		}
+		fmt.Print(strings.Repeat("*", utf8.RuneCountInString(string(username))))
 		fmt.Println("")
 		fmt.Print("Password>")
 		password, err := term.ReadPassword(syscall.Stdin)
@@ -177,6 +183,7 @@ func main() {
 			fmt.Println(err.Error())
 			os.Exit(1)
 		}
+		fmt.Print(strings.Repeat("*", utf8.RuneCountInString(string(password))))
 
 		text := textproto.NewConn(conn)
 		// Authenticate
@@ -213,7 +220,6 @@ func main() {
 					query = strings.Join(strings.Split(query, " "), " ")
 
 					if strings.HasSuffix(query, ";") {
-						log.Println(query)
 						line.AppendHistory(query)
 						err = text.PrintfLine(query)
 						if err != nil {
@@ -242,6 +248,5 @@ func main() {
 			fmt.Println("Invalid credentials.")
 		}
 
-		conn.Close()
 	}
 }
