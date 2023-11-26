@@ -125,7 +125,6 @@ func main() {
 					query = strings.Join(strings.Split(query, " "), " ")
 
 					if strings.HasSuffix(query, ";") {
-						log.Println(query)
 						line.AppendHistory(query)
 						err = text.PrintfLine(query)
 						if err != nil {
