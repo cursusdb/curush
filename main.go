@@ -31,7 +31,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"syscall"
 	"unicode/utf8"
 )
 
@@ -79,7 +78,7 @@ func main() {
 		defer conn.Close()
 
 		fmt.Print("Username>")
-		username, err := term.ReadPassword(syscall.Stdin)
+		username, err := term.ReadPassword(int(os.Stdin.Fd()))
 		if err != nil {
 			fmt.Println(err.Error())
 			os.Exit(1)
@@ -88,7 +87,7 @@ func main() {
 
 		fmt.Println("")
 		fmt.Print("Password>")
-		password, err := term.ReadPassword(syscall.Stdin)
+		password, err := term.ReadPassword(int(os.Stdin.Fd()))
 		if err != nil {
 			fmt.Println(err.Error())
 			os.Exit(1)
@@ -170,7 +169,7 @@ func main() {
 		defer conn.Close()
 
 		fmt.Print("Username>")
-		username, err := term.ReadPassword(syscall.Stdin)
+		username, err := term.ReadPassword(int(os.Stdin.Fd()))
 		if err != nil {
 			fmt.Println(err.Error())
 			os.Exit(1)
@@ -178,7 +177,7 @@ func main() {
 		fmt.Print(strings.Repeat("*", utf8.RuneCountInString(string(username))))
 		fmt.Println("")
 		fmt.Print("Password>")
-		password, err := term.ReadPassword(syscall.Stdin)
+		password, err := term.ReadPassword(int(os.Stdin.Fd()))
 		if err != nil {
 			fmt.Println(err.Error())
 			os.Exit(1)
