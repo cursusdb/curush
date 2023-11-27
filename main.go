@@ -159,7 +159,7 @@ func main() {
 		}
 
 	} else {
-		config := tls.Config{InsecureSkipVerify: true}
+		config := tls.Config{InsecureSkipVerify: false}
 
 		conn, err := tls.Dial("tcp", fmt.Sprintf("%s:%d", curush.ClusterHost, curush.ClusterPort), &config)
 		if err != nil {

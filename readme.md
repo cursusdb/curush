@@ -14,6 +14,11 @@ You can specify a specific CursusDB cluster port.
 /curush --host=X --port=1234
 ```
 
+Enable TLS
+``` 
+/curush --host=X --port=1234 --tls=true
+```
+
 ## Building
 
 ### Darwin / MacOS
