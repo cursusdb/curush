@@ -80,6 +80,7 @@ func main() {
 		fmt.Print("Username>")
 		username, err := term.ReadPassword(int(os.Stdin.Fd()))
 		if err != nil {
+			fmt.Println("")
 			fmt.Println(err.Error())
 			os.Exit(1)
 		}
@@ -89,6 +90,7 @@ func main() {
 		fmt.Print("Password>")
 		password, err := term.ReadPassword(int(os.Stdin.Fd()))
 		if err != nil {
+			fmt.Println("")
 			fmt.Println(err.Error())
 			os.Exit(1)
 		}
@@ -98,12 +100,14 @@ func main() {
 		// Authenticate
 		err = text.PrintfLine(fmt.Sprintf("Authentication: %s", base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s\\0%s", username, password)))))
 		if err != nil {
+			fmt.Println("")
 			fmt.Println(err.Error())
 			os.Exit(1)
 		}
 
 		read, err := text.ReadLine()
 		if err != nil {
+			fmt.Println("")
 			fmt.Println(err.Error())
 			os.Exit(1)
 		}
@@ -132,12 +136,14 @@ func main() {
 						line.AppendHistory(query)
 						err = text.PrintfLine(query)
 						if err != nil {
+							fmt.Println("")
 							fmt.Println(err.Error())
 							os.Exit(1)
 						}
 
 						read, err := text.ReadLine()
 						if err != nil {
+							fmt.Println("")
 							fmt.Println(err.Error())
 							os.Exit(1)
 						}
@@ -146,14 +152,17 @@ func main() {
 					}
 
 				} else if err == liner.ErrPromptAborted {
+					fmt.Println("")
 					fmt.Println("Aborted")
 					break
 				} else {
+					fmt.Println("")
 					fmt.Println("Error reading line: ", err)
 					break
 				}
 			}
 		} else {
+			fmt.Println("")
 			fmt.Println("Invalid credentials.")
 		}
 
@@ -171,6 +180,7 @@ func main() {
 		fmt.Print("Username>")
 		username, err := term.ReadPassword(int(os.Stdin.Fd()))
 		if err != nil {
+			fmt.Println("")
 			fmt.Println(err.Error())
 			os.Exit(1)
 		}
@@ -179,6 +189,7 @@ func main() {
 		fmt.Print("Password>")
 		password, err := term.ReadPassword(int(os.Stdin.Fd()))
 		if err != nil {
+			fmt.Println("")
 			fmt.Println(err.Error())
 			os.Exit(1)
 		}
@@ -188,12 +199,14 @@ func main() {
 		// Authenticate
 		err = text.PrintfLine(fmt.Sprintf("Authentication: %s", base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s\\0%s", username, password)))))
 		if err != nil {
+			fmt.Println("")
 			fmt.Println(err.Error())
 			os.Exit(1)
 		}
 
 		read, err := text.ReadLine()
 		if err != nil {
+			fmt.Println("")
 			fmt.Println(err.Error())
 			os.Exit(1)
 		}
@@ -222,12 +235,14 @@ func main() {
 						line.AppendHistory(query)
 						err = text.PrintfLine(query)
 						if err != nil {
+							fmt.Println("")
 							fmt.Println(err.Error())
 							os.Exit(1)
 						}
 
 						read, err := text.ReadLine()
 						if err != nil {
+							fmt.Println("")
 							fmt.Println(err.Error())
 							os.Exit(1)
 						}
@@ -236,14 +251,17 @@ func main() {
 					}
 
 				} else if err == liner.ErrPromptAborted {
+					fmt.Println("")
 					fmt.Println("Aborted")
 					break
 				} else {
+					fmt.Println("")
 					fmt.Println("Error reading line: ", err)
 					break
 				}
 			}
 		} else {
+			fmt.Println("")
 			fmt.Println("Invalid credentials.")
 		}
 
