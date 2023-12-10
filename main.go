@@ -63,19 +63,6 @@ func main() {
 	}
 
 	if !curush.TLS {
-		tcpAddr, err := net.ResolveTCPAddr("tcp", fmt.Sprintf("%s:%d", curush.ClusterHost, curush.ClusterPort))
-		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(1)
-		}
-
-		conn, err := net.DialTCP("tcp", nil, tcpAddr)
-		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(1)
-		}
-
-		defer conn.Close()
 
 		fmt.Print("Username>")
 		username, err := term.ReadPassword(int(os.Stdin.Fd()))
@@ -95,6 +82,20 @@ func main() {
 			os.Exit(1)
 		}
 		fmt.Print(strings.Repeat("*", utf8.RuneCountInString(string(password))))
+
+		tcpAddr, err := net.ResolveTCPAddr("tcp", fmt.Sprintf("%s:%d", curush.ClusterHost, curush.ClusterPort))
+		if err != nil {
+			fmt.Println(err.Error())
+			os.Exit(1)
+		}
+
+		conn, err := net.DialTCP("tcp", nil, tcpAddr)
+		if err != nil {
+			fmt.Println(err.Error())
+			os.Exit(1)
+		}
+
+		defer conn.Close()
 
 		text := textproto.NewConn(conn)
 		// Authenticate
@@ -167,15 +168,6 @@ func main() {
 		}
 
 	} else {
-		config := tls.Config{InsecureSkipVerify: false}
-
-		conn, err := tls.Dial("tcp", fmt.Sprintf("%s:%d", curush.ClusterHost, curush.ClusterPort), &config)
-		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(1)
-		}
-
-		defer conn.Close()
 
 		fmt.Print("Username>")
 		username, err := term.ReadPassword(int(os.Stdin.Fd()))
@@ -194,6 +186,16 @@ func main() {
 			os.Exit(1)
 		}
 		fmt.Print(strings.Repeat("*", utf8.RuneCountInString(string(password))))
+
+		config := tls.Config{InsecureSkipVerify: false}
+
+		conn, err := tls.Dial("tcp", fmt.Sprintf("%s:%d", curush.ClusterHost, curush.ClusterPort), &config)
+		if err != nil {
+			fmt.Println(err.Error())
+			os.Exit(1)
+		}
+
+		defer conn.Close()
 
 		text := textproto.NewConn(conn)
 		// Authenticate
