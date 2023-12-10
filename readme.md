@@ -20,8 +20,13 @@ Enable TLS
 ```
 
 ## Building
+All operating system binaries.
+``` 
+./bundle.sh
+```
 
-VERSION to be replaced with V for example ``v1.0.1``
+### Individual OS
+VERSION to be replaced with V for example ``v1.1.1``
 
 ### Darwin / MacOS
 
