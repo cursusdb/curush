@@ -135,7 +135,7 @@ func main() {
 
 					if strings.HasSuffix(query, ";") {
 						line.AppendHistory(query)
-						err = text.PrintfLine(query)
+						_, err = conn.Write([]byte(strings.TrimSpace(query) + "\r\n"))
 						if err != nil {
 							fmt.Println("")
 							fmt.Println(err.Error())
@@ -235,7 +235,8 @@ func main() {
 
 					if strings.HasSuffix(query, ";") {
 						line.AppendHistory(query)
-						err = text.PrintfLine(query)
+						_, err = conn.Write([]byte(strings.TrimSpace(query) + "\r\n"))
+						//err = text.PrintfLine(query) // Because of % we should not use printf
 						if err != nil {
 							fmt.Println("")
 							fmt.Println(err.Error())
