@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION=v1.1.2
+VERSION=v1.1.3
 
 echo "Bundling shell zip and tars into /bin in current directory."
 

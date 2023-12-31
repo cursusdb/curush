@@ -187,7 +187,7 @@ func main() {
 		}
 		fmt.Print(strings.Repeat("*", utf8.RuneCountInString(string(password))))
 
-		config := tls.Config{InsecureSkipVerify: false}
+		config := tls.Config{ServerName: curush.ClusterHost}
 
 		conn, err := tls.Dial("tcp", fmt.Sprintf("%s:%d", curush.ClusterHost, curush.ClusterPort), &config)
 		if err != nil {
