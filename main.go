@@ -57,6 +57,7 @@ func main() {
 
 }
 
+// RunShell starts CursusDB Shell functionality.  Reading cluster host, port and tls, authenticating, then listing to the user and transmitting the received on shell to the cluster.
 func (curush *Curush) RunShell() error {
 	flag.BoolVar(&curush.TLS, "tls", false, "Use secure connection.")
 	flag.StringVar(&curush.ClusterHost, "host", "", "Cluster host.")
