@@ -22,6 +22,7 @@ package main
 import (
 	"crypto/tls"
 	"encoding/base64"
+	"errors"
 	"flag"
 	"fmt"
 	"github.com/peterh/liner"
@@ -47,19 +48,29 @@ var (
 
 func main() {
 	var curush Curush
+
+	err := curush.RunShell()
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
+
+}
+
+func (curush *Curush) RunShell() error {
 	flag.BoolVar(&curush.TLS, "tls", false, "Use secure connection.")
 	flag.StringVar(&curush.ClusterHost, "host", "", "Cluster host.")
 	flag.IntVar(&curush.ClusterPort, "port", 7681, "Cluster host port.")
 	flag.Parse()
 
 	if curush.ClusterHost == "" {
-		fmt.Println("CursusDB cluster host required.")
-		os.Exit(1)
+		errMsg := "CursusDB cluster host required."
+		return errors.New(errMsg)
 	}
 
 	if curush.ClusterPort == 0 {
-		fmt.Println("CursusDB cluster host port required.")
-		os.Exit(1)
+		errMsg := "CursusDB cluster host port required."
+		return errors.New(errMsg)
 	}
 
 	if !curush.TLS {
@@ -68,8 +79,8 @@ func main() {
 		username, err := term.ReadPassword(int(os.Stdin.Fd()))
 		if err != nil {
 			fmt.Println("")
-			fmt.Println(err.Error())
-			os.Exit(1)
+			errMsg := err.Error()
+			return errors.New(errMsg)
 		}
 		fmt.Print(strings.Repeat("*", utf8.RuneCountInString(string(username))))
 
@@ -78,21 +89,21 @@ func main() {
 		password, err := term.ReadPassword(int(os.Stdin.Fd()))
 		if err != nil {
 			fmt.Println("")
-			fmt.Println(err.Error())
-			os.Exit(1)
+			errMsg := err.Error()
+			return errors.New(errMsg)
 		}
 		fmt.Print(strings.Repeat("*", utf8.RuneCountInString(string(password))))
 
 		tcpAddr, err := net.ResolveTCPAddr("tcp", fmt.Sprintf("%s:%d", curush.ClusterHost, curush.ClusterPort))
 		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(1)
+			errMsg := err.Error()
+			return errors.New(errMsg)
 		}
 
 		conn, err := net.DialTCP("tcp", nil, tcpAddr)
 		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(1)
+			errMsg := err.Error()
+			return errors.New(errMsg)
 		}
 
 		defer conn.Close()
@@ -102,15 +113,15 @@ func main() {
 		err = text.PrintfLine(fmt.Sprintf("Authentication: %s", base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s\\0%s", username, password)))))
 		if err != nil {
 			fmt.Println("")
-			fmt.Println(err.Error())
-			os.Exit(1)
+			errMsg := err.Error()
+			return errors.New(errMsg)
 		}
 
 		read, err := text.ReadLine()
 		if err != nil {
 			fmt.Println("")
-			fmt.Println(err.Error())
-			os.Exit(1)
+			errMsg := err.Error()
+			return errors.New(errMsg)
 		}
 
 		if strings.HasPrefix(read, fmt.Sprintf("%d ", 0)) {
@@ -138,15 +149,15 @@ func main() {
 						_, err = conn.Write([]byte(strings.TrimSpace(query) + "\r\n"))
 						if err != nil {
 							fmt.Println("")
-							fmt.Println(err.Error())
-							os.Exit(1)
+							errMsg := err.Error()
+							return errors.New(errMsg)
 						}
 
 						read, err := text.ReadLine()
 						if err != nil {
 							fmt.Println("")
-							fmt.Println(err.Error())
-							os.Exit(1)
+							errMsg := err.Error()
+							return errors.New(errMsg)
 						}
 						fmt.Println(read)
 						query = ""
@@ -173,8 +184,8 @@ func main() {
 		username, err := term.ReadPassword(int(os.Stdin.Fd()))
 		if err != nil {
 			fmt.Println("")
-			fmt.Println(err.Error())
-			os.Exit(1)
+			errMsg := err.Error()
+			return errors.New(errMsg)
 		}
 		fmt.Print(strings.Repeat("*", utf8.RuneCountInString(string(username))))
 		fmt.Println("")
@@ -182,8 +193,8 @@ func main() {
 		password, err := term.ReadPassword(int(os.Stdin.Fd()))
 		if err != nil {
 			fmt.Println("")
-			fmt.Println(err.Error())
-			os.Exit(1)
+			errMsg := err.Error()
+			return errors.New(errMsg)
 		}
 		fmt.Print(strings.Repeat("*", utf8.RuneCountInString(string(password))))
 
@@ -191,8 +202,8 @@ func main() {
 
 		conn, err := tls.Dial("tcp", fmt.Sprintf("%s:%d", curush.ClusterHost, curush.ClusterPort), &config)
 		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(1)
+			errMsg := err.Error()
+			return errors.New(errMsg)
 		}
 
 		defer conn.Close()
@@ -202,15 +213,15 @@ func main() {
 		err = text.PrintfLine(fmt.Sprintf("Authentication: %s", base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s\\0%s", username, password)))))
 		if err != nil {
 			fmt.Println("")
-			fmt.Println(err.Error())
-			os.Exit(1)
+			errMsg := err.Error()
+			return errors.New(errMsg)
 		}
 
 		read, err := text.ReadLine()
 		if err != nil {
 			fmt.Println("")
-			fmt.Println(err.Error())
-			os.Exit(1)
+			errMsg := err.Error()
+			return errors.New(errMsg)
 		}
 
 		if strings.HasPrefix(read, fmt.Sprintf("%d ", 0)) {
@@ -239,15 +250,15 @@ func main() {
 						//err = text.PrintfLine(query) // Because of % we should not use printf
 						if err != nil {
 							fmt.Println("")
-							fmt.Println(err.Error())
-							os.Exit(1)
+							errMsg := err.Error()
+							return errors.New(errMsg)
 						}
 
 						read, err := text.ReadLine()
 						if err != nil {
 							fmt.Println("")
-							fmt.Println(err.Error())
-							os.Exit(1)
+							errMsg := err.Error()
+							return errors.New(errMsg)
 						}
 						fmt.Println(read)
 						query = ""
@@ -269,4 +280,6 @@ func main() {
 		}
 
 	}
+
+	return nil
 }
