@@ -26,7 +26,7 @@ All operating system binaries.
 ```
 
 ### Individual OS
-VERSION to be replaced with V for example ``v1.1.1``
+VERSION to be replaced with V for example ``v1.2.3``
 
 ### Darwin / MacOS
 
